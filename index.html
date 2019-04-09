@@ -1,0 +1,57 @@
+<html>
+<head>
+<script type="text/javascript">
+
+    function computerPlay() {
+        var returnVal = "";
+        const rand = Math.floor(Math.random() * Math.floor(3));
+        switch (rand) {
+            case 0:
+                returnVal = "Rock";
+                break;
+            case 1:
+                returnVal = "Paper";
+                break;
+            case 2:
+                returnVal = "Scissors";         
+        }
+        return returnVal;
+    }
+
+    function playRound(playerSelection, computerSelection) {
+        var returnVal = "";
+        const winTracker = {
+            "rockscissors": "You win! Rock smashes scissors",
+            "scissorsrock": "You lose! Scissors gets smasehd by rock",
+            "scissorspaper": "You win! Scissors cuts paper",
+            "paperscissors": "You lose! Paper gets cut by scissors",
+            "paperrock": "You win! Paper covers rock",
+            "rockpaper" : "You lost! Rock gets covered by paper"
+        }
+        const lowerPlayer = playerSelection.toLowerCase();
+        const lowerComputer = computerSelection.toLowerCase();
+
+        if (lowerPlayer === lowerComputer) returnVal = "It's a tie!";
+        else returnVal = winTracker[lowerPlayer + lowerComputer];
+        return returnVal;
+    }
+
+    function game() {
+        for (var i = 0; i < 4; i++) {
+            console.log("starting game number " + (i+1));
+            var playerSelection = window.prompt("Please pick Rock, Paper or Scissors!");
+            var computerSelection = computerPlay();
+            console.log("You picked: " + playerSelection + ". Computer picked: " + computerSelection);
+            console.log(playRound(playerSelection, computerSelection));
+        }
+    }
+
+    game();
+
+</script>
+</head>
+
+<body>
+
+</body>
+</html>
