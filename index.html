@@ -1,57 +1,134 @@
 <html>
 <head>
-<script type="text/javascript">
 
-    function computerPlay() {
-        var returnVal = "";
-        const rand = Math.floor(Math.random() * Math.floor(3));
-        switch (rand) {
-            case 0:
-                returnVal = "Rock";
-                break;
-            case 1:
-                returnVal = "Paper";
-                break;
-            case 2:
-                returnVal = "Scissors";         
-        }
-        return returnVal;
-    }
+   <link rel="stylesheet" href="site.css"/>
 
-    function playRound(playerSelection, computerSelection) {
-        var returnVal = "";
-        const winTracker = {
-            "rockscissors": "You win! Rock smashes scissors",
-            "scissorsrock": "You lose! Scissors gets smasehd by rock",
-            "scissorspaper": "You win! Scissors cuts paper",
-            "paperscissors": "You lose! Paper gets cut by scissors",
-            "paperrock": "You win! Paper covers rock",
-            "rockpaper" : "You lost! Rock gets covered by paper"
-        }
-        const lowerPlayer = playerSelection.toLowerCase();
-        const lowerComputer = computerSelection.toLowerCase();
-
-        if (lowerPlayer === lowerComputer) returnVal = "It's a tie!";
-        else returnVal = winTracker[lowerPlayer + lowerComputer];
-        return returnVal;
-    }
-
-    function game() {
-        for (var i = 0; i < 4; i++) {
-            console.log("starting game number " + (i+1));
-            var playerSelection = window.prompt("Please pick Rock, Paper or Scissors!");
-            var computerSelection = computerPlay();
-            console.log("You picked: " + playerSelection + ". Computer picked: " + computerSelection);
-            console.log(playRound(playerSelection, computerSelection));
-        }
-    }
-
-    game();
-
-</script>
 </head>
-
+ 
 <body>
+        <div id="container">
+                <h3 id="instructions">Please Select Rock, Paper or Scissors</h3>
+                <span class="hidden" id="player-selection"></span>
+                <div class="selection-button" id="rock">
+                    <img src="images/rock.png" height="300px" width="300px"/>
+                </div>
+                <div class="selection-button" id="paper">
+                    <img src="images/paper.png" height="300px" width="300px"/>
+                </div>
+                <div class="selection-button" id="scissors">
+                    <img src="images/scissors.png" height="300px" width="300px"/>
+                </div>
+                <div class="centered"><button id="start-playing">Begin</button></div>
+                <div id="game-result">
+                </div>
+                <footer>Note: Graphics are by Cristiano Zoucas from the Noun Project</footer>
+            </div>
+
+     <script type="text/javascript">
+
+            function computerPlay() {
+                var returnVal = "";
+                const rand = Math.floor(Math.random() * Math.floor(3));
+                switch (rand) {
+                    case 0:
+                        returnVal = "Rock";
+                        break;
+                    case 1:
+                        returnVal = "Paper";
+                        break;
+                    case 2:
+                        returnVal = "Scissors";         
+                }
+                return returnVal;
+            }
+        
+            function playRound(playerSelection, computerSelection) {
+                let returnVal = "";
+                const winTracker = {
+                    "rockscissors": "You win! Rock smashes scissors",
+                    "scissorsrock": "You lose! Scissors gets smashed by rock",
+                    "scissorspaper": "You win! Scissors cuts paper",
+                    "paperscissors": "You lose! Paper gets cut by scissors",
+                    "paperrock": "You win! Paper covers rock",
+                    "rockpaper" : "You lost! Rock gets covered by paper"
+                }
+                const lowerPlayer = playerSelection.toLowerCase();
+                const lowerComputer = computerSelection.toLowerCase();
+        
+                if (lowerPlayer === lowerComputer) returnVal = "It's a tie!";
+                else returnVal = winTracker[lowerPlayer + lowerComputer];
+                return returnVal;
+            }
+        
+           function processSelection(event)
+           {
+            let beginBtn = document.getElementById("start-playing");
+            let headingEle = document.getElementById("instructions");
+            let selectedItem = event.currentTarget.getAttribute("id");
+            let activeSelection = document.getElementById("player-selection");
+            if (activeSelection.textContent != null && activeSelection.textContent != "" )
+            {
+               let lastDivSel = document.getElementById(activeSelection.textContent);
+               lastDivSel.classList.remove("selected");
+            }
+
+            event.currentTarget.classList.add("selected");
+            if (event.currentTarget.classList.contains("selected"))
+            {                         
+                activeSelection.textContent = selectedItem;
+                headingEle.textContent = `You've selected ${selectedItem}! Press Begin to start match!`;
+
+            } else {               
+                headingEle.textContent = "Select Rock, Paper or Scissors";            
+            }
+        
+           }
+          
+           function startGame(event)
+           {
+               let playerSelection = document.getElementById("player-selection").textContent;  
+               if (playerSelection == null || playerSelection == "") 
+               {
+                   alert("Please select a move to play!");
+               } 
+               else
+               {
+
+               
+                let computerSelection = computerPlay();
+
+                let resultElement = document.getElementById("game-result");       
+                let oppontentText =  document.createElement("div");
+                oppontentText.textContent = `Your opponent selected ${computerSelection}!`;
+                oppontentText.setAttribute("class","opponent-text ");
+                resultElement.appendChild(oppontentText);
+
+                let computerSelectionImg = document.createElement("img");
+                computerSelectionImg.setAttribute("src",`images/${computerSelection}.png`);
+                computerSelectionImg.setAttribute("height","300px");
+                computerSelectionImg.setAttribute("width","300px");
+                resultElement.appendChild(computerSelectionImg);
+                let result = playRound(playerSelection, computerSelection);
+                
+                let resultText = document.createElement("div");
+                resultText.innerText = result;
+                
+                resultElement.appendChild(resultText);
+               }
+              
+           }
+
+           let selectionButtons = document.querySelectorAll(".selection-button");
+        
+           selectionButtons.forEach( (selectButton) => { 
+                                      selectButton.addEventListener('click', processSelection); 
+                                     }); ; 
+            
+           let startBtn = document.querySelector("#start-playing");
+           startBtn.addEventListener('click', startGame);
+
+        
+        </script>
 
 </body>
 </html>
