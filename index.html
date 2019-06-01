@@ -18,7 +18,10 @@
                 <div class="selection-button" id="scissors">
                     <img src="images/scissors.png" height="300px" width="300px"/>
                 </div>
-                <div class="centered"><button id="start-playing">Begin</button></div>
+                <div class="centered" id="start-playing-wrapper">
+                    <button id="start-playing" class="hidden">Begin</button>
+                    <button id="new-game" class="hidden">Play Again!</button>
+                </div>
                 <div id="game-result">
                 </div>
                 <footer>Note: Graphics are by Cristiano Zoucas from the Noun Project</footer>
@@ -26,6 +29,7 @@
 
      <script type="text/javascript">
 
+        
             function computerPlay() {
                 var returnVal = "";
                 const rand = Math.floor(Math.random() * Math.floor(3));
@@ -45,12 +49,12 @@
             function playRound(playerSelection, computerSelection) {
                 let returnVal = "";
                 const winTracker = {
-                    "rockscissors": "You win! Rock smashes scissors",
-                    "scissorsrock": "You lose! Scissors gets smashed by rock",
-                    "scissorspaper": "You win! Scissors cuts paper",
-                    "paperscissors": "You lose! Paper gets cut by scissors",
-                    "paperrock": "You win! Paper covers rock",
-                    "rockpaper" : "You lost! Rock gets covered by paper"
+                    "rockscissors": "You win! Rock smashes scissors.",
+                    "scissorsrock": "You lose! Scissors gets smashed by rock.",
+                    "scissorspaper": "You win! Scissors cuts paper.",
+                    "paperscissors": "You lose! Paper gets cut by scissors.",
+                    "paperrock": "You win! Paper covers rock.",
+                    "rockpaper" : "You lost! Rock gets covered by paper."
                 }
                 const lowerPlayer = playerSelection.toLowerCase();
                 const lowerComputer = computerSelection.toLowerCase();
@@ -62,7 +66,9 @@
         
            function processSelection(event)
            {
+            
             let beginBtn = document.getElementById("start-playing");
+            beginBtn.classList.remove("hidden");
             let headingEle = document.getElementById("instructions");
             let selectedItem = event.currentTarget.getAttribute("id");
             let activeSelection = document.getElementById("player-selection");
@@ -93,7 +99,8 @@
                } 
                else
                {
-
+                let beginBtn = document.getElementById("start-playing");
+                beginBtn.classList.add("hidden");
                
                 let computerSelection = computerPlay();
 
@@ -110,14 +117,29 @@
                 resultElement.appendChild(computerSelectionImg);
                 let result = playRound(playerSelection, computerSelection);
                 
-                let resultText = document.createElement("div");
+                let resultText = document.createElement("h3");
                 resultText.innerText = result;
                 
                 resultElement.appendChild(resultText);
+
+                let newGameBtn = document.getElementById("new-game");
+                newGameBtn.classList.remove("hidden");
                }
               
            }
 
+           
+           function playAgain(event)
+           {
+                let headingEle = document.getElementById("instructions");
+                headingEle.textContent = "Select Rock, Paper or Scissors";       
+
+                //TODO: clear out opponent node children, and remove the selected class
+                //from any of the selection buttons
+
+           }
+           
+           //Attach event listerns to all buttons  (main selection buttons and new/replay buttons)
            let selectionButtons = document.querySelectorAll(".selection-button");
         
            selectionButtons.forEach( (selectButton) => { 
@@ -126,7 +148,9 @@
             
            let startBtn = document.querySelector("#start-playing");
            startBtn.addEventListener('click', startGame);
-
+           
+           let newGameBtn = document.getElementById("new-game");
+           newGameBtn.addEventListener('click', playAgain);
         
         </script>
 
